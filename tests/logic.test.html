@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Campus Cafeteria POS Logic Tests</title>
+    <style>
+      :root {
+        font-family: Inter, system-ui, sans-serif;
+        color: #202720;
+        background: #f4f1e8;
+      }
+
+      body {
+        width: min(780px, calc(100% - 40px));
+        margin: 0 auto;
+        padding: 48px 0;
+      }
+
+      main {
+        padding: 32px;
+        border: 1px solid #dcd8cc;
+        border-radius: 20px;
+        background: #fffdf8;
+        box-shadow: 0 16px 40px rgba(51, 56, 47, 0.08);
+      }
+
+      h1 {
+        margin-top: 0;
+      }
+
+      #test-summary {
+        padding: 12px 16px;
+        border-radius: 10px;
+        background: #e7f0e9;
+        color: #154a31;
+        font-weight: 800;
+      }
+
+      #test-results {
+        display: grid;
+        gap: 10px;
+        padding: 0;
+        list-style: none;
+      }
+
+      .test-result {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 12px 14px;
+        border: 1px solid #dcd8cc;
+        border-radius: 10px;
+      }
+
+      .test-result strong {
+        color: #24764b;
+      }
+
+      .test-result.is-failure {
+        border-color: #a43d32;
+        background: #fff4f1;
+      }
+
+      .test-result.is-failure strong {
+        color: #a43d32;
+      }
+    </style>
+    <script type="module" src="logic.test.js"></script>
+  </head>
+  <body data-test-status="running">
+    <main>
+      <p>IT 415 Practical Examination</p>
+      <h1>Campus Cafeteria POS Logic Tests</h1>
+      <p id="test-summary" role="status" aria-live="polite">Running tests…</p>
+      <ul id="test-results"></ul>
+    </main>
+  </body>
+</html>

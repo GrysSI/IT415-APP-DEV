@@ -4,7 +4,7 @@ A simple desktop-friendly point-of-sale application for the individual IT 415 pr
 
 ## Current progress
 
-Stage 3 — validation and final improvements — is complete and ready for final review.
+Stage 4 — final verification and documentation — is complete and ready for review.
 
 The application currently provides:
 
@@ -20,6 +20,8 @@ The application currently provides:
 - New Transaction controls that clear the cart, payment, confirmation, and receipt state.
 
 The three planned development stages are now implemented. Final browser review and the student's own commit remain separate steps.
+
+Stage 4 adds reproducible logic tests and evidence documents without changing the completed application features.
 
 ## Technology
 
@@ -40,6 +42,14 @@ IT415 APP DEV/
 |   |-- cart.js
 |   |-- payment.js
 |   `-- products.js
+|-- tests/
+|   |-- logic.test.html
+|   `-- logic.test.js
+|-- docs/
+|   |-- ACCEPTANCE_CHECKLIST.md
+|   |-- AI_DEVELOPMENT_LOG.md
+|   |-- EVIDENCE_INDEX.md
+|   `-- TEST_RESULTS.md
 `-- README.md
 ```
 
@@ -50,6 +60,16 @@ IT415 APP DEV/
 3. Open the displayed local URL in a browser.
 
 The application does not require package installation or a build command. A local server is recommended because the JavaScript files use browser modules.
+
+## Run the logic tests
+
+1. Start the same local server used for the application.
+2. Open `/tests/logic.test.html` from the local server.
+3. Confirm the page reports `8/8 tests passed`.
+
+These tests cover the required products, worked-example total, cart decrease/removal, invalid cash cases, insufficient cash, exact cash, the ₱200.00/₱35.00 example, and unique transaction references.
+
+The acceptance checklist, evidence index, AI log, and recorded test results are in `docs/`. Items that still require the student's own confirmation remain unchecked.
 
 ## Final checks
 
