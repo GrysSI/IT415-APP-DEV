@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A desktop-friendly campus cafeteria point-of-sale application."
+    />
+    <title>Campus Cafeteria POS</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <script type="module" src="js/app.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">CC</span>
+        <div>
+          <p class="eyebrow">IT 415 Practical Examination</p>
+          <h1>Campus Cafeteria POS</h1>
+        </div>
+      </div>
+      <span class="stage-badge">Stage 1 · Interface</span>
+    </header>
+
+    <main class="app-shell">
+      <section class="welcome" aria-labelledby="welcome-title">
+        <div>
+          <p class="eyebrow">New order</p>
+          <h2 id="welcome-title">What would you like today?</h2>
+          <p>Choose from the cafeteria menu, then review your order before paying.</p>
+        </div>
+
+        <ol class="progress-steps" aria-label="Transaction progress">
+          <li class="is-current" aria-current="step"><span>1</span> Order</li>
+          <li><span>2</span> Payment</li>
+          <li><span>3</span> Receipt</li>
+        </ol>
+      </section>
+
+      <p id="stage-status" class="stage-notice" role="status">
+        Stage 1 preview: the interface is ready. Product and cart actions will be enabled in Stage 2.
+      </p>
+
+      <section id="order-view" class="app-view" aria-label="Create an order">
+        <section class="menu-panel" aria-labelledby="menu-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Cafeteria menu</p>
+              <h2 id="menu-title">Products</h2>
+            </div>
+            <span id="product-count" class="count-label">6 products</span>
+          </div>
+
+          <div id="product-grid" class="product-grid"></div>
+
+          <noscript>
+            <p class="message message-error">JavaScript must be enabled to display the menu.</p>
+          </noscript>
+        </section>
+
+        <aside class="order-panel" aria-labelledby="order-summary-title">
+          <div class="section-heading order-heading">
+            <div>
+              <p class="eyebrow">Current order</p>
+              <h2 id="order-summary-title">Order Summary</h2>
+            </div>
+            <span id="cart-count" class="count-label">0 items</span>
+          </div>
+
+          <div id="empty-cart" class="empty-cart">
+            <span class="empty-icon" aria-hidden="true">+</span>
+            <h3>Your cart is empty</h3>
+            <p>Select a product to begin your order.</p>
+          </div>
+
+          <div id="cart-items" class="cart-items" aria-live="polite" hidden></div>
+
+          <div class="totals" aria-label="Order totals">
+            <div>
+              <span>Items subtotal</span>
+              <strong id="cart-subtotal">₱0.00</strong>
+            </div>
+            <div class="grand-total">
+              <span>Total</span>
+              <strong id="cart-total">₱0.00</strong>
+            </div>
+          </div>
+
+          <button id="review-order-button" class="primary-button" type="button" disabled>
+            Review Order
+          </button>
+          <p class="button-help">Ordering will be enabled during Stage 2.</p>
+        </aside>
+      </section>
+
+      <!-- Later stages will display these prepared views after the order is reviewed. -->
+      <section id="payment-view" class="app-view single-panel" aria-labelledby="payment-title" hidden>
+        <div class="flow-panel">
+          <p class="eyebrow">Cash payment</p>
+          <h2 id="payment-title">Enter payment amount</h2>
+          <label for="cash-amount">Cash received</label>
+          <div class="money-input">
+            <span aria-hidden="true">₱</span>
+            <input
+              id="cash-amount"
+              name="cashAmount"
+              type="text"
+              inputmode="decimal"
+              autocomplete="off"
+              placeholder="0.00"
+              disabled
+            />
+          </div>
+          <p id="payment-message" class="message" aria-live="polite"></p>
+          <div class="button-row">
+            <button class="secondary-button" type="button" disabled>Back to Order</button>
+            <button class="primary-button" type="button" disabled>Confirm Payment</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="confirmation-view" class="app-view single-panel" aria-labelledby="confirmation-title" hidden>
+        <div class="flow-panel centered-panel">
+          <span class="success-mark" aria-hidden="true">✓</span>
+          <p class="eyebrow">Payment confirmed</p>
+          <h2 id="confirmation-title">Transaction complete</h2>
+          <p>Payment details and change will appear here in Stage 3.</p>
+        </div>
+      </section>
+
+      <section id="receipt-view" class="app-view single-panel" aria-labelledby="receipt-title" hidden>
+        <div class="flow-panel receipt-panel">
+          <p class="eyebrow">Digital receipt</p>
+          <h2 id="receipt-title">Campus Cafeteria</h2>
+          <p>Receipt line items and transaction details will be generated in Stage 3.</p>
+          <button class="primary-button" type="button" disabled>New Transaction</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Campus Cafeteria POS · In-memory classroom project</p>
+    </footer>
+  </body>
+</html>
