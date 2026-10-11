@@ -20,7 +20,7 @@
           <h1>Campus Cafeteria POS</h1>
         </div>
       </div>
-      <span class="stage-badge">Stage 1 · Interface</span>
+      <span class="stage-badge">Stage 2 · Ordering</span>
     </header>
 
     <main class="app-shell">
@@ -39,7 +39,8 @@
       </section>
 
       <p id="stage-status" class="stage-notice" role="status">
-        Stage 1 preview: the interface is ready. Product and cart actions will be enabled in Stage 2.
+        Stage 2 is ready: add products, adjust quantities, remove items, and review the order.
+        Cash payment will be enabled in Stage 3.
       </p>
 
       <section id="order-view" class="app-view" aria-label="Create an order">
@@ -90,11 +91,40 @@
           <button id="review-order-button" class="primary-button" type="button" disabled>
             Review Order
           </button>
-          <p class="button-help">Ordering will be enabled during Stage 2.</p>
+          <p id="review-order-help" class="button-help">Add at least one item to review the order.</p>
         </aside>
       </section>
 
-      <!-- Later stages will display these prepared views after the order is reviewed. -->
+      <section id="review-view" class="app-view single-panel" aria-labelledby="review-title" hidden>
+        <div class="flow-panel order-review-panel">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Final check</p>
+              <h2 id="review-title">Review Your Order</h2>
+            </div>
+            <span id="review-item-count" class="count-label">0 items</span>
+          </div>
+
+          <div id="review-items" class="review-items"></div>
+
+          <div class="review-total">
+            <span>Order total</span>
+            <strong id="review-total">₱0.00</strong>
+          </div>
+
+          <div class="button-row">
+            <button id="back-to-order-button" class="secondary-button" type="button">
+              Back to Menu
+            </button>
+            <button id="continue-to-payment-button" class="primary-button" type="button" disabled>
+              Continue to Payment
+            </button>
+          </div>
+          <p class="button-help">Cash payment will be enabled during Stage 3.</p>
+        </div>
+      </section>
+
+      <!-- Stage 3 will display these prepared views after the order is reviewed. -->
       <section id="payment-view" class="app-view single-panel" aria-labelledby="payment-title" hidden>
         <div class="flow-panel">
           <p class="eyebrow">Cash payment</p>

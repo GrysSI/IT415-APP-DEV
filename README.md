@@ -4,17 +4,18 @@ A simple desktop-friendly point-of-sale application for the individual IT 415 pr
 
 ## Current progress
 
-Stage 1 — setup and interface — is complete.
+Stage 2 — ordering and calculations — is complete and ready for review.
 
 The application currently provides:
 
-- A responsive cafeteria product catalog.
-- The six required products and exact examination prices.
-- An empty order-summary area with totals prepared for Stage 2.
+- A responsive catalog containing the six required products and exact prices.
+- Product buttons that add items to an in-memory cart.
+- Quantity increase, quantity decrease, and item removal controls.
+- Live quantities, item subtotals, item count, and order total.
+- A separate order-review screen with items, quantities, subtotals, and total.
 - Prepared views for cash payment, payment confirmation, and a digital receipt.
-- Clear visual notices that ordering and payment behavior are not implemented yet.
 
-Product buttons, cart calculations, payment validation, receipts, and New Transaction behavior will be implemented in later stages. No calculation test is claimed as passing yet.
+Cash validation, change, confirmation, receipts, and New Transaction behavior will be implemented in Stage 3.
 
 ## Technology
 
@@ -32,6 +33,7 @@ IT415 APP DEV/
 |   `-- styles.css
 |-- js/
 |   |-- app.js
+|   |-- cart.js
 |   `-- products.js
 `-- README.md
 ```
@@ -44,17 +46,19 @@ IT415 APP DEV/
 
 The application does not require package installation or a build command. A local server is recommended because the JavaScript files use browser modules.
 
-## Stage 1 checks
+## Stage 2 checks
 
 Verify the following before committing this stage:
 
-- The page title and Campus Cafeteria POS heading are visible.
-- Six product cards appear.
-- Product names and prices match the examination prompt.
-- Product controls are visibly disabled and explain that ordering begins in Stage 2.
-- The order summary begins empty with a total of ₱0.00.
-- The layout remains readable on a desktop or laptop browser.
-- No database, login, inventory, QR, card, or deployment feature is present.
+- Click each product and confirm it appears in the order summary.
+- Add the same product more than once and confirm its quantity and subtotal increase.
+- Use the minus button and confirm the quantity decreases; decreasing from one removes the item.
+- Use Remove and confirm the selected item leaves the cart.
+- Confirm item count and total update after every cart change.
+- Confirm Review Order is disabled for an empty cart and enabled when the cart contains items.
+- Open Review Order and confirm its items, quantities, subtotals, and total match the cart.
+- Use Back to Menu and confirm the cart remains unchanged.
+- Confirm Continue to Payment remains disabled because payment belongs to Stage 3.
 
 ## Development stages
 
@@ -62,5 +66,5 @@ Verify the following before committing this stage:
 2. **Ordering and calculations** — cart actions, quantities, removal, subtotals, total, and order review.
 3. **Validation and final improvements** — cash validation, change, confirmation, receipt, transaction reference, reset, final checks, and documentation.
 
-The required calculation example will be verified in Stage 3: two Fried Chicken, one Rice, and one Iced Tea should total ₱165.00; a ₱200.00 cash payment should produce ₱35.00 change.
+The ordering calculation from the required example is verified in Stage 2: two Fried Chicken, one Rice, and one Iced Tea total ₱165.00. The ₱200.00 payment and ₱35.00 change will be verified when cash payment is implemented in Stage 3.
 
