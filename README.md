@@ -4,7 +4,7 @@ A simple desktop-friendly point-of-sale application for the individual IT 415 pr
 
 ## Current progress
 
-Stage 2 — ordering and calculations — is complete and ready for review.
+Stage 3 — validation and final improvements — is complete and ready for final review.
 
 The application currently provides:
 
@@ -13,9 +13,13 @@ The application currently provides:
 - Quantity increase, quantity decrease, and item removal controls.
 - Live quantities, item subtotals, item count, and order total.
 - A separate order-review screen with items, quantities, subtotals, and total.
-- Prepared views for cash payment, payment confirmation, and a digital receipt.
+- Cash input with blank, malformed, negative, and insufficient-payment validation.
+- Exact change calculation using integer centavos.
+- Payment confirmation with a unique in-memory transaction reference.
+- A digital receipt containing items, quantities, subtotals, total, cash received, change, and reference.
+- New Transaction controls that clear the cart, payment, confirmation, and receipt state.
 
-Cash validation, change, confirmation, receipts, and New Transaction behavior will be implemented in Stage 3.
+The three planned development stages are now implemented. Final browser review and the student's own commit remain separate steps.
 
 ## Technology
 
@@ -34,6 +38,7 @@ IT415 APP DEV/
 |-- js/
 |   |-- app.js
 |   |-- cart.js
+|   |-- payment.js
 |   `-- products.js
 `-- README.md
 ```
@@ -46,7 +51,7 @@ IT415 APP DEV/
 
 The application does not require package installation or a build command. A local server is recommended because the JavaScript files use browser modules.
 
-## Stage 2 checks
+## Final checks
 
 Verify the following before committing this stage:
 
@@ -58,7 +63,16 @@ Verify the following before committing this stage:
 - Confirm Review Order is disabled for an empty cart and enabled when the cart contains items.
 - Open Review Order and confirm its items, quantities, subtotals, and total match the cart.
 - Use Back to Menu and confirm the cart remains unchanged.
-- Confirm Continue to Payment remains disabled because payment belongs to Stage 3.
+- Confirm Continue to Payment opens the cash-payment screen and shows the correct amount due.
+- Continue to payment and submit a blank amount; confirm a clear message appears.
+- Test letters or malformed decimals; confirm they are rejected.
+- Test a negative amount; confirm it is rejected.
+- Test an amount below the order total; confirm the shortfall is shown.
+- Test an exact payment; confirm change is ₱0.00.
+- Test a larger payment; confirm change equals cash received minus total.
+- Confirm payment shows a transaction reference.
+- Confirm the receipt matches the order, total, cash received, change, and reference.
+- Confirm New Transaction clears prior cart and payment data and returns to the menu.
 
 ## Development stages
 
@@ -66,5 +80,5 @@ Verify the following before committing this stage:
 2. **Ordering and calculations** — cart actions, quantities, removal, subtotals, total, and order review.
 3. **Validation and final improvements** — cash validation, change, confirmation, receipt, transaction reference, reset, final checks, and documentation.
 
-The ordering calculation from the required example is verified in Stage 2: two Fried Chicken, one Rice, and one Iced Tea total ₱165.00. The ₱200.00 payment and ₱35.00 change will be verified when cash payment is implemented in Stage 3.
+The required calculation example is verified: two Fried Chicken, one Rice, and one Iced Tea total ₱165.00; a ₱200.00 cash payment produces ₱35.00 change.
 

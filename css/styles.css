@@ -558,6 +558,26 @@ input:focus-visible {
   font-weight: 800;
 }
 
+.payment-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 0 4px;
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: var(--surface-muted);
+}
+
+.payment-summary span {
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.payment-summary strong {
+  color: var(--primary-dark);
+  font-size: 1.35rem;
+}
+
 .money-input {
   display: flex;
   align-items: center;
@@ -614,6 +634,127 @@ input:focus-visible {
 
 .message-error {
   color: var(--danger);
+}
+
+.message-success {
+  color: var(--success);
+}
+
+.money-input.has-error {
+  border-color: var(--danger);
+  box-shadow: 0 0 0 3px rgba(164, 61, 50, 0.1);
+}
+
+.transaction-details,
+.receipt-totals {
+  display: grid;
+  gap: 10px;
+  margin: 28px 0 20px;
+  padding: 18px;
+  border-radius: 14px;
+  background: var(--surface-muted);
+  text-align: left;
+}
+
+.transaction-details > div,
+.receipt-totals > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.transaction-details dt,
+.receipt-totals dt {
+  color: var(--text-muted);
+}
+
+.transaction-details dd,
+.receipt-totals dd {
+  margin: 0;
+  font-weight: 800;
+}
+
+.transaction-details .change-row,
+.receipt-totals .change-row {
+  margin-top: 4px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+.reference-label {
+  margin: 0 0 4px;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.transaction-reference {
+  display: block;
+  color: var(--primary-dark);
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 1rem;
+  overflow-wrap: anywhere;
+}
+
+.receipt-panel {
+  text-align: left;
+}
+
+.receipt-panel > .eyebrow,
+.receipt-panel > h2,
+.receipt-thanks {
+  text-align: center;
+}
+
+.receipt-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 12px 0 20px;
+  color: var(--text-muted);
+  font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+  font-size: 0.78rem;
+}
+
+.receipt-items {
+  display: grid;
+  gap: 12px;
+  padding: 18px 0;
+  border-top: 1px dashed var(--border);
+  border-bottom: 1px dashed var(--border);
+}
+
+.receipt-item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 16px;
+}
+
+.receipt-item-name {
+  font-weight: 800;
+}
+
+.receipt-item-detail {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+}
+
+.receipt-item-subtotal {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: center;
+  font-weight: 800;
+}
+
+.receipt-thanks {
+  margin: 24px 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 [hidden] {

@@ -20,7 +20,7 @@
           <h1>Campus Cafeteria POS</h1>
         </div>
       </div>
-      <span class="stage-badge">Stage 2 · Ordering</span>
+      <span class="stage-badge">Stage 3 · Complete Flow</span>
     </header>
 
     <main class="app-shell">
@@ -39,8 +39,8 @@
       </section>
 
       <p id="stage-status" class="stage-notice" role="status">
-        Stage 2 is ready: add products, adjust quantities, remove items, and review the order.
-        Cash payment will be enabled in Stage 3.
+        The complete cash transaction flow is ready: order, review, pay, view the receipt, and
+        start a new transaction.
       </p>
 
       <section id="order-view" class="app-view" aria-label="Create an order">
@@ -116,19 +116,24 @@
             <button id="back-to-order-button" class="secondary-button" type="button">
               Back to Menu
             </button>
-            <button id="continue-to-payment-button" class="primary-button" type="button" disabled>
+            <button id="continue-to-payment-button" class="primary-button" type="button">
               Continue to Payment
             </button>
           </div>
-          <p class="button-help">Cash payment will be enabled during Stage 3.</p>
+          <p class="button-help">Payment method: cash</p>
         </div>
       </section>
 
-      <!-- Stage 3 will display these prepared views after the order is reviewed. -->
       <section id="payment-view" class="app-view single-panel" aria-labelledby="payment-title" hidden>
-        <div class="flow-panel">
+        <form id="payment-form" class="flow-panel" novalidate>
           <p class="eyebrow">Cash payment</p>
           <h2 id="payment-title">Enter payment amount</h2>
+
+          <div class="payment-summary">
+            <span>Amount due</span>
+            <strong id="payment-order-total">₱0.00</strong>
+          </div>
+
           <label for="cash-amount">Cash received</label>
           <div class="money-input">
             <span aria-hidden="true">₱</span>
@@ -139,15 +144,20 @@
               inputmode="decimal"
               autocomplete="off"
               placeholder="0.00"
-              disabled
+              maxlength="12"
+              aria-describedby="payment-message"
             />
           </div>
           <p id="payment-message" class="message" aria-live="polite"></p>
           <div class="button-row">
-            <button class="secondary-button" type="button" disabled>Back to Order</button>
-            <button class="primary-button" type="button" disabled>Confirm Payment</button>
+            <button id="back-to-review-button" class="secondary-button" type="button">
+              Back to Review
+            </button>
+            <button id="confirm-payment-button" class="primary-button" type="submit">
+              Confirm Payment
+            </button>
           </div>
-        </div>
+        </form>
       </section>
 
       <section id="confirmation-view" class="app-view single-panel" aria-labelledby="confirmation-title" hidden>
@@ -155,7 +165,34 @@
           <span class="success-mark" aria-hidden="true">✓</span>
           <p class="eyebrow">Payment confirmed</p>
           <h2 id="confirmation-title">Transaction complete</h2>
-          <p>Payment details and change will appear here in Stage 3.</p>
+          <p>Your cash payment was accepted.</p>
+
+          <dl class="transaction-details">
+            <div>
+              <dt>Total</dt>
+              <dd id="confirmation-total">₱0.00</dd>
+            </div>
+            <div>
+              <dt>Cash received</dt>
+              <dd id="confirmation-paid">₱0.00</dd>
+            </div>
+            <div class="change-row">
+              <dt>Change</dt>
+              <dd id="confirmation-change">₱0.00</dd>
+            </div>
+          </dl>
+
+          <p class="reference-label">Transaction reference</p>
+          <strong id="transaction-reference" class="transaction-reference">—</strong>
+
+          <div class="button-row">
+            <button id="view-receipt-button" class="secondary-button" type="button">
+              View Receipt
+            </button>
+            <button id="confirmation-new-transaction-button" class="primary-button" type="button">
+              New Transaction
+            </button>
+          </div>
         </div>
       </section>
 
@@ -163,8 +200,36 @@
         <div class="flow-panel receipt-panel">
           <p class="eyebrow">Digital receipt</p>
           <h2 id="receipt-title">Campus Cafeteria</h2>
-          <p>Receipt line items and transaction details will be generated in Stage 3.</p>
-          <button class="primary-button" type="button" disabled>New Transaction</button>
+          <div class="receipt-meta">
+            <span id="receipt-reference">—</span>
+            <span id="receipt-date">—</span>
+          </div>
+
+          <div id="receipt-items" class="receipt-items"></div>
+
+          <dl class="receipt-totals">
+            <div>
+              <dt>Total</dt>
+              <dd id="receipt-total">₱0.00</dd>
+            </div>
+            <div>
+              <dt>Payment method</dt>
+              <dd>Cash</dd>
+            </div>
+            <div>
+              <dt>Cash received</dt>
+              <dd id="receipt-paid">₱0.00</dd>
+            </div>
+            <div class="change-row">
+              <dt>Change</dt>
+              <dd id="receipt-change">₱0.00</dd>
+            </div>
+          </dl>
+
+          <p class="receipt-thanks">Thank you for dining with us.</p>
+          <button id="receipt-new-transaction-button" class="primary-button" type="button">
+            New Transaction
+          </button>
         </div>
       </section>
     </main>

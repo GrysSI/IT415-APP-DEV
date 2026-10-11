@@ -1,10 +1,16 @@
 import { PRODUCTS } from "./products.js";
 import { addCartItem, decreaseCartItem, removeCartItem, summarizeCart } from "./cart.js";
+import { createTransactionReference, validateCashPayment } from "./payment.js";
 
 const productGrid = document.querySelector("#product-grid");
 const productCount = document.querySelector("#product-count");
 const orderView = document.querySelector("#order-view");
 const reviewView = document.querySelector("#review-view");
+const paymentView = document.querySelector("#payment-view");
+const confirmationView = document.querySelector("#confirmation-view");
+const receiptView = document.querySelector("#receipt-view");
+const progressSteps = [...document.querySelectorAll(".progress-steps li")];
+
 const emptyCart = document.querySelector("#empty-cart");
 const cartItems = document.querySelector("#cart-items");
 const cartCount = document.querySelector("#cart-count");
@@ -12,18 +18,50 @@ const cartSubtotal = document.querySelector("#cart-subtotal");
 const cartTotal = document.querySelector("#cart-total");
 const reviewOrderButton = document.querySelector("#review-order-button");
 const reviewOrderHelp = document.querySelector("#review-order-help");
+
 const reviewItems = document.querySelector("#review-items");
 const reviewItemCount = document.querySelector("#review-item-count");
 const reviewTotal = document.querySelector("#review-total");
 const backToOrderButton = document.querySelector("#back-to-order-button");
+const continueToPaymentButton = document.querySelector("#continue-to-payment-button");
 
+const paymentForm = document.querySelector("#payment-form");
+const paymentOrderTotal = document.querySelector("#payment-order-total");
+const cashAmountInput = document.querySelector("#cash-amount");
+const paymentMessage = document.querySelector("#payment-message");
+const backToReviewButton = document.querySelector("#back-to-review-button");
+
+const confirmationTotal = document.querySelector("#confirmation-total");
+const confirmationPaid = document.querySelector("#confirmation-paid");
+const confirmationChange = document.querySelector("#confirmation-change");
+const transactionReference = document.querySelector("#transaction-reference");
+const viewReceiptButton = document.querySelector("#view-receipt-button");
+const confirmationNewTransactionButton = document.querySelector(
+  "#confirmation-new-transaction-button",
+);
+
+const receiptReference = document.querySelector("#receipt-reference");
+const receiptDate = document.querySelector("#receipt-date");
+const receiptItems = document.querySelector("#receipt-items");
+const receiptTotal = document.querySelector("#receipt-total");
+const receiptPaid = document.querySelector("#receipt-paid");
+const receiptChange = document.querySelector("#receipt-change");
+const receiptNewTransactionButton = document.querySelector("#receipt-new-transaction-button");
+
+const views = Object.freeze({
+  order: orderView,
+  review: reviewView,
+  payment: paymentView,
+  confirmation: confirmationView,
+  receipt: receiptView,
+});
 const productsById = new Map(PRODUCTS.map((product) => [product.id, product]));
-let cart = new Map();
 
-/**
- * Formats an integer centavo amount as Philippine peso currency.
- * Keeping monetary values as integers will support exact calculations in Stage 2.
- */
+let cart = new Map();
+let completedTransaction = null;
+let transactionSequence = 0;
+
+/** Formats an integer centavo amount as Philippine peso currency. */
 function formatPeso(priceInCentavos) {
   return new Intl.NumberFormat("en-PH", {
     style: "currency",
@@ -60,8 +98,7 @@ function createProductCard(product) {
 }
 
 function renderProductCatalog() {
-  const cards = PRODUCTS.map(createProductCard);
-  productGrid.replaceChildren(...cards);
+  productGrid.replaceChildren(...PRODUCTS.map(createProductCard));
   productCount.textContent = `${PRODUCTS.length} products`;
 }
 
@@ -135,20 +172,20 @@ function createCartItem(line) {
   return item;
 }
 
-function createReviewItem(line) {
+function createSummaryItem(line, classPrefix) {
   const item = document.createElement("div");
-  item.className = "review-item";
+  item.className = `${classPrefix}-item`;
 
   const name = document.createElement("span");
-  name.className = "review-item-name";
+  name.className = `${classPrefix}-item-name`;
   name.textContent = line.product.name;
 
   const detail = document.createElement("span");
-  detail.className = "review-item-detail";
+  detail.className = `${classPrefix}-item-detail`;
   detail.textContent = `${line.quantity} × ${formatPeso(line.product.priceInCentavos)}`;
 
   const subtotal = document.createElement("strong");
-  subtotal.className = "review-item-subtotal";
+  subtotal.className = `${classPrefix}-item-subtotal`;
   subtotal.textContent = formatPeso(line.subtotalInCentavos);
 
   item.append(name, detail, subtotal);
@@ -177,28 +214,182 @@ function renderCart() {
 
 function renderReview() {
   const summary = summarizeCart(cart, productsById);
-  reviewItems.replaceChildren(...summary.lines.map(createReviewItem));
+  reviewItems.replaceChildren(
+    ...summary.lines.map((line) => createSummaryItem(line, "review")),
+  );
   reviewItemCount.textContent = itemCountLabel(summary.itemCount);
   reviewTotal.textContent = formatPeso(summary.totalInCentavos);
 }
 
+function renderConfirmation(transaction) {
+  confirmationTotal.textContent = formatPeso(transaction.totalInCentavos);
+  confirmationPaid.textContent = formatPeso(transaction.amountPaidInCentavos);
+  confirmationChange.textContent = formatPeso(transaction.changeInCentavos);
+  transactionReference.textContent = transaction.reference;
+}
+
+function renderReceipt(transaction) {
+  receiptReference.textContent = transaction.reference;
+  receiptDate.textContent = transaction.completedAt.toLocaleString("en-PH", {
+    dateStyle: "medium",
+    timeStyle: "short",
+  });
+  receiptItems.replaceChildren(
+    ...transaction.lines.map((line) => createSummaryItem(line, "receipt")),
+  );
+  receiptTotal.textContent = formatPeso(transaction.totalInCentavos);
+  receiptPaid.textContent = formatPeso(transaction.amountPaidInCentavos);
+  receiptChange.textContent = formatPeso(transaction.changeInCentavos);
+}
+
+function updateProgress(viewName) {
+  const activeStep = viewName === "receipt" ? 2 : ["payment", "confirmation"].includes(viewName) ? 1 : 0;
+
+  progressSteps.forEach((step, index) => {
+    const isCurrent = index === activeStep;
+    step.classList.toggle("is-current", isCurrent);
+    if (isCurrent) {
+      step.setAttribute("aria-current", "step");
+    } else {
+      step.removeAttribute("aria-current");
+    }
+  });
+}
+
+function showView(viewName) {
+  Object.entries(views).forEach(([name, view]) => {
+    view.hidden = name !== viewName;
+  });
+  updateProgress(viewName);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function showOrderView() {
-  reviewView.hidden = true;
-  orderView.hidden = false;
+  showView("order");
   reviewOrderButton.focus();
 }
 
 function showReviewView() {
   const summary = summarizeCart(cart, productsById);
   if (summary.itemCount === 0) {
+    showOrderView();
     return;
   }
 
   renderReview();
-  orderView.hidden = true;
-  reviewView.hidden = false;
+  showView("review");
   backToOrderButton.focus();
-  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function clearPaymentMessage() {
+  paymentMessage.textContent = "";
+  paymentMessage.className = "message";
+  cashAmountInput.removeAttribute("aria-invalid");
+  cashAmountInput.closest(".money-input").classList.remove("has-error");
+}
+
+function showPaymentView() {
+  const summary = summarizeCart(cart, productsById);
+  if (summary.itemCount === 0) {
+    showOrderView();
+    return;
+  }
+
+  paymentOrderTotal.textContent = formatPeso(summary.totalInCentavos);
+  clearPaymentMessage();
+  showView("payment");
+  cashAmountInput.focus();
+}
+
+function paymentErrorMessage(result) {
+  if (result.code === "blank") {
+    return "Enter the cash amount.";
+  }
+  if (result.code === "negative") {
+    return "Cash amount cannot be negative.";
+  }
+  if (result.code === "insufficient") {
+    return `Cash is insufficient. Add ${formatPeso(result.shortfallInCentavos)} more.`;
+  }
+  if (result.code === "invalid-total") {
+    return "The order total is invalid. Return to the menu and review the order.";
+  }
+  return "Enter a valid number with no more than two decimal places.";
+}
+
+function showPaymentError(result) {
+  paymentMessage.textContent = paymentErrorMessage(result);
+  paymentMessage.className = "message message-error";
+  cashAmountInput.setAttribute("aria-invalid", "true");
+  cashAmountInput.closest(".money-input").classList.add("has-error");
+  cashAmountInput.focus();
+}
+
+function completePayment(event) {
+  event.preventDefault();
+
+  const summary = summarizeCart(cart, productsById);
+  const payment = validateCashPayment(cashAmountInput.value, summary.totalInCentavos);
+
+  if (!payment.ok) {
+    showPaymentError(payment);
+    return;
+  }
+
+  transactionSequence += 1;
+  const completedAt = new Date();
+  completedTransaction = Object.freeze({
+    reference: createTransactionReference(completedAt, transactionSequence),
+    completedAt,
+    lines: summary.lines,
+    itemCount: summary.itemCount,
+    totalInCentavos: summary.totalInCentavos,
+    amountPaidInCentavos: payment.amountInCentavos,
+    changeInCentavos: payment.changeInCentavos,
+  });
+
+  clearPaymentMessage();
+  renderConfirmation(completedTransaction);
+  showView("confirmation");
+  viewReceiptButton.focus();
+}
+
+function showReceiptView() {
+  if (!completedTransaction) {
+    return;
+  }
+
+  renderReceipt(completedTransaction);
+  showView("receipt");
+  receiptNewTransactionButton.focus();
+}
+
+function startNewTransaction() {
+  cart = new Map();
+  completedTransaction = null;
+  cashAmountInput.value = "";
+  clearPaymentMessage();
+
+  reviewItems.replaceChildren();
+  reviewItemCount.textContent = "0 items";
+  reviewTotal.textContent = formatPeso(0);
+  paymentOrderTotal.textContent = formatPeso(0);
+
+  confirmationTotal.textContent = formatPeso(0);
+  confirmationPaid.textContent = formatPeso(0);
+  confirmationChange.textContent = formatPeso(0);
+  transactionReference.textContent = "—";
+
+  receiptItems.replaceChildren();
+  receiptReference.textContent = "—";
+  receiptDate.textContent = "—";
+  receiptTotal.textContent = formatPeso(0);
+  receiptPaid.textContent = formatPeso(0);
+  receiptChange.textContent = formatPeso(0);
+
+  renderCart();
+  showView("order");
+  productGrid.querySelector(".product-card")?.focus();
 }
 
 function handleProductClick(event) {
@@ -234,6 +425,14 @@ productGrid.addEventListener("click", handleProductClick);
 cartItems.addEventListener("click", handleCartAction);
 reviewOrderButton.addEventListener("click", showReviewView);
 backToOrderButton.addEventListener("click", showOrderView);
+continueToPaymentButton.addEventListener("click", showPaymentView);
+backToReviewButton.addEventListener("click", showReviewView);
+cashAmountInput.addEventListener("input", clearPaymentMessage);
+paymentForm.addEventListener("submit", completePayment);
+viewReceiptButton.addEventListener("click", showReceiptView);
+confirmationNewTransactionButton.addEventListener("click", startNewTransaction);
+receiptNewTransactionButton.addEventListener("click", startNewTransaction);
 
 renderProductCatalog();
 renderCart();
+showView("order");
