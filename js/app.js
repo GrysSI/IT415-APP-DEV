@@ -93,7 +93,11 @@ function createProductCard(product) {
   price.className = "product-price";
   price.textContent = formatPeso(product.priceInCentavos);
 
-  button.append(icon, name, price);
+  const action = document.createElement("span");
+  action.className = "product-action";
+  action.innerHTML = '<span aria-hidden="true">+</span> Add to order';
+
+  button.append(icon, name, price, action);
   return button;
 }
 

@@ -51,3 +51,19 @@ Result: **8/8 passed**
 - Add required student, section, and instructor metadata.
 - Capture screenshots only if required by the instructor.
 
+## UI redesign regression verification
+
+Verification date: October 12, 2026
+
+Environment: Local Node static server and Chromium-based in-app browser
+
+- Browser logic tests: **8/8 passed**.
+- Redesigned menu displayed all six product cards and explicit Add to order actions.
+- Worked-example cart and review: 4 items and ₱165.00 — PASS.
+- Blank payment message: `Enter the cash amount.` — PASS.
+- ₱100.00 payment message: `Cash is insufficient. Add ₱65.00 more.` — PASS.
+- ₱200.00 payment produced ₱35.00 change — PASS.
+- Receipt matched Fried Chicken ×2, Rice ×1, Iced Tea ×1, ₱165.00 total, ₱200.00 paid, and ₱35.00 change — PASS.
+- New Transaction restored 0 items, ₱0.00, the empty-cart state, and hid the previous receipt — PASS.
+- Browser warnings and errors: none.
+

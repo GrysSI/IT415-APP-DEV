@@ -8,6 +8,7 @@ Stage 4 — final verification and documentation — is complete and ready for r
 
 The application currently provides:
 
+- A polished, responsive POS workspace with clearly separated menu, order, payment, confirmation, and receipt containers.
 - A responsive catalog containing the six required products and exact prices.
 - Product buttons that add items to an in-memory cart.
 - Quantity increase, quantity decrease, and item removal controls.

@@ -53,3 +53,15 @@ This log records the actual staged prompts and generated work. The student shoul
 
 **Human evaluation/adaptation:** _Pending student review and Stage 4 commit._
 
+## Entry 5 — Interface redesign and visual refactoring
+
+**User prompt:** Approved a cleaner, modern, readable, desktop-friendly redesign of every visible POS container while preserving all products, calculations, cash validation, receipt data, and reset behavior.
+
+**AI contribution:** Refined the application shell, header and status treatment, progress indicator, product cards and explicit Add actions, sticky order panel, quantity controls, totals, review screen, payment form, validation states, confirmation screen, receipt, empty state, buttons, focus states, and responsive layout. Existing DOM IDs and calculation modules were preserved.
+
+**Verification performed:** The browser logic runner reported 8/8 passed. A browser regression flow produced four items and a ₱165.00 total for two Fried Chicken, one Rice, and one Iced Tea; rejected blank and ₱100.00 payments; accepted ₱200.00; displayed ₱35.00 change; rendered matching receipt lines; and reset to zero items and ₱0.00. No browser warnings or errors were reported.
+
+**Code evidence:** `index.html`, `css/styles.css`, `js/app.js`, `README.md`, and `docs/TEST_RESULTS.md`. No commit was created by the AI.
+
+**Human evaluation/adaptation:** _Pending student review of the redesigned layout on the examination computer._
+
