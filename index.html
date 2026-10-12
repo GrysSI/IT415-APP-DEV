@@ -13,42 +13,59 @@
   </head>
   <body>
     <header class="site-header">
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true">CC</span>
-        <div>
-          <p class="eyebrow">IT 415 Practical Examination</p>
-          <h1>Campus Cafeteria POS</h1>
+      <div class="header-inner">
+        <div class="brand">
+          <span class="brand-mark" aria-hidden="true">CC</span>
+          <div class="brand-copy">
+            <p class="eyebrow">IT 415 Practical Examination</p>
+            <h1>Campus Cafeteria POS</h1>
+            <p class="brand-subtitle">Fast, simple campus dining checkout</p>
+          </div>
+        </div>
+
+        <div class="system-status" aria-label="System ready for a new order">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span>
+            <small>System status</small>
+            <strong>Ready for order</strong>
+          </span>
         </div>
       </div>
-      <span class="stage-badge">Stage 3 · Complete Flow</span>
     </header>
 
     <main class="app-shell">
       <section class="welcome" aria-labelledby="welcome-title">
-        <div>
+        <div class="welcome-copy">
           <p class="eyebrow">New order</p>
           <h2 id="welcome-title">What would you like today?</h2>
           <p>Choose from the cafeteria menu, then review your order before paying.</p>
         </div>
 
-        <ol class="progress-steps" aria-label="Transaction progress">
-          <li class="is-current" aria-current="step"><span>1</span> Order</li>
-          <li><span>2</span> Payment</li>
-          <li><span>3</span> Receipt</li>
-        </ol>
+        <div class="progress-wrap">
+          <p>Transaction progress</p>
+          <ol class="progress-steps" aria-label="Transaction progress">
+            <li class="is-current" aria-current="step"><span>1</span> Order</li>
+            <li><span>2</span> Payment</li>
+            <li><span>3</span> Receipt</li>
+          </ol>
+        </div>
       </section>
 
-      <p id="stage-status" class="stage-notice" role="status">
-        The complete cash transaction flow is ready: order, review, pay, view the receipt, and
-        start a new transaction.
-      </p>
+      <div id="stage-status" class="stage-notice" role="status">
+        <span class="notice-icon" aria-hidden="true">₱</span>
+        <span>
+          <strong>Cash-only checkout</strong>
+          Review the order before payment. Totals update automatically as items change.
+        </span>
+      </div>
 
       <section id="order-view" class="app-view" aria-label="Create an order">
         <section class="menu-panel" aria-labelledby="menu-title">
           <div class="section-heading">
             <div>
               <p class="eyebrow">Cafeteria menu</p>
-              <h2 id="menu-title">Products</h2>
+              <h2 id="menu-title">Choose your meal</h2>
+              <p class="section-description">Select a product card to add it to the current order.</p>
             </div>
             <span id="product-count" class="count-label">6 products</span>
           </div>
@@ -65,14 +82,15 @@
             <div>
               <p class="eyebrow">Current order</p>
               <h2 id="order-summary-title">Order Summary</h2>
+              <p class="section-description">Review quantities and running totals.</p>
             </div>
             <span id="cart-count" class="count-label">0 items</span>
           </div>
 
           <div id="empty-cart" class="empty-cart">
-            <span class="empty-icon" aria-hidden="true">+</span>
+            <span class="empty-icon" aria-hidden="true">＋</span>
             <h3>Your cart is empty</h3>
-            <p>Select a product to begin your order.</p>
+            <p>Select any menu card to begin your order.</p>
           </div>
 
           <div id="cart-items" class="cart-items" aria-live="polite" hidden></div>
@@ -89,7 +107,7 @@
           </div>
 
           <button id="review-order-button" class="primary-button" type="button" disabled>
-            Review Order
+            Review Order <span aria-hidden="true">→</span>
           </button>
           <p id="review-order-help" class="button-help">Add at least one item to review the order.</p>
         </aside>
@@ -97,10 +115,11 @@
 
       <section id="review-view" class="app-view single-panel" aria-labelledby="review-title" hidden>
         <div class="flow-panel order-review-panel">
-          <div class="section-heading">
+          <div class="section-heading flow-heading">
             <div>
               <p class="eyebrow">Final check</p>
               <h2 id="review-title">Review Your Order</h2>
+              <p class="section-description">Confirm every item before moving to payment.</p>
             </div>
             <span id="review-item-count" class="count-label">0 items</span>
           </div>
@@ -114,10 +133,10 @@
 
           <div class="button-row">
             <button id="back-to-order-button" class="secondary-button" type="button">
-              Back to Menu
+              <span aria-hidden="true">←</span> Back to Menu
             </button>
             <button id="continue-to-payment-button" class="primary-button" type="button">
-              Continue to Payment
+              Continue to Payment <span aria-hidden="true">→</span>
             </button>
           </div>
           <p class="button-help">Payment method: cash</p>
@@ -125,9 +144,15 @@
       </section>
 
       <section id="payment-view" class="app-view single-panel" aria-labelledby="payment-title" hidden>
-        <form id="payment-form" class="flow-panel" novalidate>
-          <p class="eyebrow">Cash payment</p>
-          <h2 id="payment-title">Enter payment amount</h2>
+        <form id="payment-form" class="flow-panel payment-panel" novalidate>
+          <div class="flow-heading payment-heading">
+            <span class="flow-icon" aria-hidden="true">₱</span>
+            <div>
+              <p class="eyebrow">Cash payment</p>
+              <h2 id="payment-title">Enter payment amount</h2>
+              <p class="section-description">The change will be calculated automatically.</p>
+            </div>
+          </div>
 
           <div class="payment-summary">
             <span>Amount due</span>
@@ -145,16 +170,17 @@
               autocomplete="off"
               placeholder="0.00"
               maxlength="12"
-              aria-describedby="payment-message"
+              aria-describedby="cash-help payment-message"
             />
           </div>
+          <p id="cash-help" class="field-help">Enter pesos with up to two decimal places.</p>
           <p id="payment-message" class="message" aria-live="polite"></p>
           <div class="button-row">
             <button id="back-to-review-button" class="secondary-button" type="button">
-              Back to Review
+              <span aria-hidden="true">←</span> Back to Review
             </button>
             <button id="confirm-payment-button" class="primary-button" type="submit">
-              Confirm Payment
+              Confirm Payment <span aria-hidden="true">→</span>
             </button>
           </div>
         </form>
@@ -165,7 +191,7 @@
           <span class="success-mark" aria-hidden="true">✓</span>
           <p class="eyebrow">Payment confirmed</p>
           <h2 id="confirmation-title">Transaction complete</h2>
-          <p>Your cash payment was accepted.</p>
+          <p class="confirmation-copy">Your cash payment was accepted and your receipt is ready.</p>
 
           <dl class="transaction-details">
             <div>
@@ -182,15 +208,17 @@
             </div>
           </dl>
 
-          <p class="reference-label">Transaction reference</p>
-          <strong id="transaction-reference" class="transaction-reference">—</strong>
+          <div class="reference-card">
+            <p class="reference-label">Transaction reference</p>
+            <strong id="transaction-reference" class="transaction-reference">—</strong>
+          </div>
 
           <div class="button-row">
             <button id="view-receipt-button" class="secondary-button" type="button">
               View Receipt
             </button>
             <button id="confirmation-new-transaction-button" class="primary-button" type="button">
-              New Transaction
+              New Transaction <span aria-hidden="true">→</span>
             </button>
           </div>
         </div>
@@ -198,8 +226,12 @@
 
       <section id="receipt-view" class="app-view single-panel" aria-labelledby="receipt-title" hidden>
         <div class="flow-panel receipt-panel">
-          <p class="eyebrow">Digital receipt</p>
-          <h2 id="receipt-title">Campus Cafeteria</h2>
+          <div class="receipt-header">
+            <span class="receipt-brand" aria-hidden="true">CC</span>
+            <p class="eyebrow">Digital receipt</p>
+            <h2 id="receipt-title">Campus Cafeteria</h2>
+            <p>Official transaction record</p>
+          </div>
           <div class="receipt-meta">
             <span id="receipt-reference">—</span>
             <span id="receipt-date">—</span>
@@ -228,14 +260,14 @@
 
           <p class="receipt-thanks">Thank you for dining with us.</p>
           <button id="receipt-new-transaction-button" class="primary-button" type="button">
-            New Transaction
+            New Transaction <span aria-hidden="true">→</span>
           </button>
         </div>
       </section>
     </main>
 
     <footer>
-      <p>Campus Cafeteria POS · In-memory classroom project</p>
+      <p>Campus Cafeteria POS <span aria-hidden="true">•</span> Cash-only classroom project</p>
     </footer>
   </body>
 </html>

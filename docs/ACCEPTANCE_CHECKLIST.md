@@ -39,11 +39,11 @@ Status legend: `[x]` verified, `[ ]` requires the student's final manual confirm
 
 ## Code quality and documentation
 
-- [x] Product data, cart calculations, payment validation, and DOM rendering have separate modules.
+- [x] Product data, cart calculations, payment validation, formatting, DOM presentation, and transaction control have separate modules.
 - [x] Monetary calculations use integer centavos.
 - [x] Cart, review, confirmation, and receipt reuse the same calculated transaction values.
 - [x] README identifies files, run instructions, stages, and final checks.
-- [x] Reproducible browser logic tests are included.
+- [x] Ten reproducible browser-and-Node logic tests are included.
 - [x] AI-assisted stages and verification are recorded.
 - [ ] Student has added any required name, section, instructor, or submission metadata.
 - [ ] Student has captured final screenshots if required by the instructor.
@@ -56,5 +56,7 @@ Status legend: `[x]` verified, `[ ]` requires the student's final manual confirm
 - `js/products.js`: required products and centavo prices.
 - `js/cart.js`: quantity and total calculations.
 - `js/payment.js`: cash parsing, validation, change, and transaction references.
-- `js/app.js`: screen flow, rendering, and complete reset behavior.
+- `js/format.js`: shared peso, receipt-date, and item-count formatting.
+- `js/ui.js`: DOM rendering, view navigation, feedback, focus, and visual reset behavior.
+- `js/app.js`: transaction state and coordination between business logic and the UI.
 

@@ -1,5 +1,7 @@
 # Campus Cafeteria POS Test Results
 
+## Stage 4 baseline record
+
 Test date: October 12, 2026  
 Environment: Local PHP development server and Chromium-based in-app browser  
 Commit tested: `0e5e7ae` plus the uncommitted Stage 4 test and documentation files
@@ -50,4 +52,44 @@ Result: **8/8 passed**
 - Confirm the layout on the actual desktop or laptop used for the examination.
 - Add required student, section, and instructor metadata.
 - Capture screenshots only if required by the instructor.
+
+## UI redesign regression verification
+
+Verification date: October 12, 2026
+
+Environment: Local Node static server and Chromium-based in-app browser
+
+- Browser logic tests: **8/8 passed**.
+- Redesigned menu displayed all six product cards and explicit Add to order actions.
+- Worked-example cart and review: 4 items and ₱165.00 — PASS.
+- Blank payment message: `Enter the cash amount.` — PASS.
+- ₱100.00 payment message: `Cash is insufficient. Add ₱65.00 more.` — PASS.
+- ₱200.00 payment produced ₱35.00 change — PASS.
+- Receipt matched Fried Chicken ×2, Rice ×1, Iced Tea ×1, ₱165.00 total, ₱200.00 paid, and ₱35.00 change — PASS.
+- New Transaction restored 0 items, ₱0.00, the empty-cart state, and hid the previous receipt — PASS.
+- Browser warnings and errors: none.
+
+## Codebase refactoring verification
+
+Verification date: October 12, 2026
+
+Baseline commit: `432aa73` (`Modification for UI`)
+
+Refactoring state: uncommitted working-tree changes
+
+### Completed checks
+
+- JavaScript syntax checks for `app.js`, `ui.js`, `format.js`, `cart.js`, `payment.js`, `products.js`, and `logic.test.js` — PASS.
+- `git diff --check` — PASS.
+- Dependency-free Node logic runner: **10/10 passed**.
+- Required DOM selector audit: all 35 IDs referenced by `ui.js` exist in `index.html` — PASS.
+- Local server returned HTTP 200 for the application, `app.js`, `ui.js`, and `format.js` — PASS.
+- `app.js` reduced from 442 lines to 125 lines while keeping transaction state and orchestration in one controller.
+- Confirmed-unused CSS tokens `--page-accent`, `--radius-sm`, and selector `.message-success` were removed.
+
+### Pending browser regression
+
+The post-refactor browser logic page and full visual transaction replay were not completed because the available browser controller rejected localhost navigation after the local server restarted. The earlier pre-refactoring baseline was 8/8 with no console errors, but it is not being reused as proof of the refactored browser behavior.
+
+Before submission, open `/tests/logic.test.html` and confirm `10/10 tests passed`, then repeat the worked transaction, invalid-payment checks, receipt, reset, visual comparison, and console check.
 

@@ -1,4 +1,5 @@
 import { addCartItem, decreaseCartItem, removeCartItem, summarizeCart } from "../js/cart.js";
+import { formatPeso } from "../js/format.js";
 import { createTransactionReference, parseCashAmount, validateCashPayment } from "../js/payment.js";
 import { PRODUCTS } from "../js/products.js";
 
@@ -58,6 +59,10 @@ test("The worked-example order contains 4 items and totals ₱165.00", () => {
   );
 });
 
+test("Centavo values use consistent Philippine peso formatting", () => {
+  assert(formatPeso(16500) === "₱165.00", `Unexpected currency format: ${formatPeso(16500)}`);
+});
+
 test("Decrease and remove operations update the total", () => {
   let cart = buildWorkedExampleCart();
   cart = decreaseCartItem(cart, "fried-chicken");
@@ -77,6 +82,11 @@ test("Insufficient cash is rejected with the correct shortfall", () => {
   const payment = validateCashPayment("100", 16500);
   assert(payment.code === "insufficient", "Insufficient cash was not rejected");
   assert(payment.shortfallInCentavos === 6500, "Expected a ₱65.00 shortfall");
+});
+
+test("Payment is rejected when the order total is invalid", () => {
+  const payment = validateCashPayment("200", 0);
+  assert(payment.code === "invalid-total", "An invalid order total was not rejected");
 });
 
 test("Exact cash produces zero change", () => {
@@ -99,26 +109,38 @@ test("Sequential transaction references are unique", () => {
   assert(first !== second, "Sequential references must differ");
 });
 
-const resultList = document.querySelector("#test-results");
-const summary = document.querySelector("#test-summary");
-
-results.forEach((result) => {
-  const item = document.createElement("li");
-  item.className = `test-result${result.passed ? "" : " is-failure"}`;
-
-  const label = document.createElement("span");
-  label.textContent = result.passed ? result.name : `${result.name}: ${result.message}`;
-
-  const status = document.createElement("strong");
-  status.textContent = result.passed ? "PASS" : "FAIL";
-
-  item.append(label, status);
-  resultList.append(item);
-});
-
 const passedCount = results.filter((result) => result.passed).length;
 const allPassed = passedCount === results.length;
-summary.textContent = `${passedCount}/${results.length} tests passed`;
-summary.className = allPassed ? "" : "is-failure";
-document.body.dataset.testStatus = allPassed ? "passed" : "failed";
+
+if (typeof document === "undefined") {
+  results.forEach((result) => {
+    const status = result.passed ? "PASS" : `FAIL: ${result.message}`;
+    console.log(`${status} — ${result.name}`);
+  });
+  console.log(`${passedCount}/${results.length} tests passed`);
+  if (!allPassed) {
+    process.exitCode = 1;
+  }
+} else {
+  const resultList = document.querySelector("#test-results");
+  const summary = document.querySelector("#test-summary");
+
+  results.forEach((result) => {
+    const item = document.createElement("li");
+    item.className = `test-result${result.passed ? "" : " is-failure"}`;
+
+    const label = document.createElement("span");
+    label.textContent = result.passed ? result.name : `${result.name}: ${result.message}`;
+
+    const status = document.createElement("strong");
+    status.textContent = result.passed ? "PASS" : "FAIL";
+
+    item.append(label, status);
+    resultList.append(item);
+  });
+
+  summary.textContent = `${passedCount}/${results.length} tests passed`;
+  summary.className = allPassed ? "" : "is-failure";
+  document.body.dataset.testStatus = allPassed ? "passed" : "failed";
+}
 
