@@ -1,7 +1,7 @@
+/* Design tokens */
 :root {
   color-scheme: light;
   --page: #f3f6f3;
-  --page-accent: #e6efe9;
   --surface: #ffffff;
   --surface-soft: #f7f9f7;
   --surface-tint: #edf5f0;
@@ -25,9 +25,9 @@
   --radius-xl: 28px;
   --radius-lg: 20px;
   --radius-md: 14px;
-  --radius-sm: 10px;
 }
 
+/* Base document styles */
 * {
   box-sizing: border-box;
 }
@@ -67,6 +67,7 @@ input:focus-visible {
   outline-offset: 3px;
 }
 
+/* Application header */
 .site-header {
   position: relative;
   z-index: 10;
@@ -184,6 +185,7 @@ input:focus-visible {
   box-sizing: content-box;
 }
 
+/* Transaction introduction and progress */
 .app-shell {
   width: min(1500px, calc(100% - 64px));
   margin: 0 auto;
@@ -313,6 +315,7 @@ input:focus-visible {
   font-weight: 900;
 }
 
+/* Shared panels and ordering layout */
 #order-view {
   display: grid;
   grid-template-columns: minmax(0, 1.52fr) minmax(350px, 0.62fr);
@@ -388,6 +391,7 @@ input:focus-visible {
   font-weight: 800;
 }
 
+/* Product catalog */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -496,6 +500,7 @@ input:focus-visible {
   color: #ffffff;
 }
 
+/* Cart contents and totals */
 .empty-cart {
   display: grid;
   min-height: 230px;
@@ -689,6 +694,7 @@ input:focus-visible {
   letter-spacing: -0.035em;
 }
 
+/* Shared actions */
 .primary-button,
 .secondary-button {
   display: inline-flex;
@@ -756,6 +762,7 @@ input:focus-visible {
   text-align: center;
 }
 
+/* Review and transaction flow panels */
 .single-panel {
   display: grid;
   min-height: 590px;
@@ -827,6 +834,7 @@ input:focus-visible {
   letter-spacing: -0.04em;
 }
 
+/* Cash payment */
 .payment-panel {
   width: min(620px, 100%);
 }
@@ -937,10 +945,6 @@ input:focus-visible {
   color: var(--danger);
 }
 
-.message-success {
-  color: var(--success);
-}
-
 .money-input.has-error {
   border-color: var(--danger);
   background: var(--danger-soft);
@@ -954,6 +958,7 @@ input:focus-visible {
   margin-top: 23px;
 }
 
+/* Confirmation and receipt */
 .centered-panel {
   width: min(620px, 100%);
   text-align: center;
@@ -1142,6 +1147,7 @@ footer span {
   color: var(--accent);
 }
 
+/* Responsive layout */
 @media (max-width: 1210px) {
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));

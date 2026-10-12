@@ -19,6 +19,7 @@ The application currently provides:
 - Payment confirmation with a unique in-memory transaction reference.
 - A digital receipt containing items, quantities, subtotals, total, cash received, change, and reference.
 - New Transaction controls that clear the cart, payment, confirmation, and receipt state.
+- Separate business, formatting, presentation, and controller modules for easier maintenance and testing.
 
 The three planned development stages are now implemented. Final browser review and the student's own commit remain separate steps.
 
@@ -28,7 +29,7 @@ Stage 4 adds reproducible logic tests and evidence documents without changing th
 
 - HTML for the application structure.
 - CSS for the desktop-friendly interface.
-- Plain JavaScript modules for hard-coded product data and interface rendering.
+- Plain JavaScript modules for product data, business calculations, formatting, DOM presentation, and transaction control.
 - In-memory data only; no database, login, inventory system, payment gateway, or deployment.
 
 ## Project files
@@ -41,8 +42,10 @@ IT415 APP DEV/
 |-- js/
 |   |-- app.js
 |   |-- cart.js
+|   |-- format.js
 |   |-- payment.js
-|   `-- products.js
+|   |-- products.js
+|   `-- ui.js
 |-- tests/
 |   |-- logic.test.html
 |   `-- logic.test.js
@@ -66,9 +69,15 @@ The application does not require package installation or a build command. A loca
 
 1. Start the same local server used for the application.
 2. Open `/tests/logic.test.html` from the local server.
-3. Confirm the page reports `8/8 tests passed`.
+3. Confirm the page reports `10/10 tests passed`.
 
-These tests cover the required products, worked-example total, cart decrease/removal, invalid cash cases, insufficient cash, exact cash, the ₱200.00/₱35.00 example, and unique transaction references.
+If Node.js is available, the same dependency-free tests can also be run from the project folder:
+
+```text
+node tests/logic.test.js
+```
+
+These tests cover the required products, worked-example total, peso formatting, cart decrease/removal, invalid cash cases, insufficient cash, invalid order totals, exact cash, the ₱200.00/₱35.00 example, and unique transaction references.
 
 The acceptance checklist, evidence index, AI log, and recorded test results are in `docs/`. Items that still require the student's own confirmation remain unchecked.
 

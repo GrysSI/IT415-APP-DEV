@@ -51,7 +51,7 @@ This log records the actual staged prompts and generated work. The student shoul
 
 **Code evidence:** `tests/logic.test.html`, `tests/logic.test.js`, `docs/ACCEPTANCE_CHECKLIST.md`, `docs/EVIDENCE_INDEX.md`, `docs/TEST_RESULTS.md`.
 
-**Human evaluation/adaptation:** _Pending student review and Stage 4 commit._
+**Human evaluation/adaptation:** The Stage 4 work was later committed as `19fa48f` (`Stage 4 Done`). The student's independent review note remains pending.
 
 ## Entry 5 — Interface redesign and visual refactoring
 
@@ -61,7 +61,19 @@ This log records the actual staged prompts and generated work. The student shoul
 
 **Verification performed:** The browser logic runner reported 8/8 passed. A browser regression flow produced four items and a ₱165.00 total for two Fried Chicken, one Rice, and one Iced Tea; rejected blank and ₱100.00 payments; accepted ₱200.00; displayed ₱35.00 change; rendered matching receipt lines; and reset to zero items and ₱0.00. No browser warnings or errors were reported.
 
-**Code evidence:** `index.html`, `css/styles.css`, `js/app.js`, `README.md`, and `docs/TEST_RESULTS.md`. No commit was created by the AI.
+**Code evidence:** `index.html`, `css/styles.css`, `js/app.js`, `README.md`, and `docs/TEST_RESULTS.md`. The redesign was later committed as `432aa73` (`Modification for UI`).
 
 **Human evaluation/adaptation:** _Pending student review of the redesigned layout on the examination computer._
+
+## Entry 6 — Codebase refactoring
+
+**User prompt:** Refactor the completed POS to improve organization, readability, maintainability, and testability while preserving the approved interface, features, calculations, and workflow. Inspect and plan first, wait for approval, then implement and verify without changing Git history.
+
+**AI contribution:** Extracted pure formatting functions into `js/format.js`, isolated DOM queries, rendering, navigation, focus, feedback, and visual reset behavior in `js/ui.js`, and reduced `js/app.js` to transaction state and orchestration. Organized the existing CSS with section labels, removed only confirmed-unused rules, and made the same logic suite runnable in both a browser and Node without adding dependencies.
+
+**Verification performed:** JavaScript syntax checks passed for all source and test modules. `git diff --check` passed. The expanded logic suite reported 10/10 passed in Node, all 35 required UI selectors matched existing HTML IDs, and the local server returned HTTP 200 for the application and new modules. The post-refactor visual browser replay was not completed because the available browser controller rejected localhost navigation after the server restart; this check remains pending rather than being reported as passed.
+
+**Code evidence:** `js/app.js`, `js/ui.js`, `js/format.js`, `css/styles.css`, `tests/logic.test.js`, `README.md`, and the evidence documents. No refactoring commit was created by the AI.
+
+**Human evaluation/adaptation:** _Pending student review and browser replay on the examination computer._
 
